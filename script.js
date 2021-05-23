@@ -1,10 +1,17 @@
 const libraryList = document.querySelector('#library-list');
+const newBookForm = document.querySelector('#form-popup');
 
 // submitInput.addEventListener('click', () => {
 //     addBookToLibrary();
 //     refreshLibrary();
 //     closeForm();
 // })
+
+document.addEventListener('click',function(e){
+    if(e.target && e.target.id == 'addButton'){
+          openForm();
+     }
+ });
 
 let myLibrary = [
     new Book("The Melancholy of Haruhi Suzumiya", "Nagaru Tanigawa", 206, false),
@@ -33,7 +40,7 @@ function refreshLibrary() {
     myLibrary.forEach(book => {
         libraryList.appendChild(updateCard(book));
     })
-    libraryList.appendChild(addCardOptional())
+    libraryList.appendChild(addCardBtn())
 }
 
 function updateCard(book) {
@@ -41,13 +48,15 @@ function updateCard(book) {
     let title = document.createElement('p');
     let author = document.createElement('p');
     let pages = document.createElement('p');
-    let read = document.createElement('p');
+    let readContainer = document.createElement('div')
+    let read = document.createElement('button');
 
     card.className = 'card shadow';
     title.className = 'card-title';
     author.className = 'card-author';
     pages.className = 'card-pages';
-    read.className = 'card-read';
+    readContainer.className = 'card-read'
+    read.className = 'card-readBtn';
 
     if (!book.read) card.classList.add('card-notcompleted');
     else card.classList.add('card-completed');
@@ -59,44 +68,32 @@ function updateCard(book) {
     card.appendChild(title);
     card.appendChild(author);
     card.appendChild(pages);
-    card.appendChild(read);
+    readContainer.appendChild(read);
+    card.appendChild(readContainer);
 
     return card;
 }
 
-function addCardOptional() {
-    let form = document.createElement('form');
-    form.innerHTML = `<div class="form-input">
-            <label for="input-title">Title: </label>
-            <input type="text" name="input-title" id='input-title'>
-        </div>
-        <div class="form-input">
-            <label for="input-author">Author: </label>
-            <input type="text" name="input-author" id='input-author'>            
-        </div>
-        <div class="form-input">
-            <label for="input-pages">Pages: </label>
-            <input type="text" name="input-pages" id='input-pages'>
-        </div>
-        <div class="form-input">
-            <label for="input-read">Completed: </label>
-            <input type="checkbox" name="input-read" data-read>
-        </div>
-        <button type="button" id='submitInputBtn'>Submit</button>`
-    return form;
+function addCardBtn() {
+    let btn = document.createElement('div');
+    let plusSvg = document.createElement('img');
+    btn.id = 'addButton';
+    btn.classList.add('shadow');
+    plusSvg.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDM0OS4wMyAzNDkuMDMxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyIiB4bWw6c3BhY2U9InByZXNlcnZlIj48Zz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCTxwYXRoIGQ9Ik0zNDkuMDMsMTQxLjIyNnY2Ni41NzljMCw1LjAxMi00LjA2MSw5LjA3OS05LjA3OSw5LjA3OUgyMTYuODg0djEyMy4wNjdjMCw1LjAxOS00LjA2Nyw5LjA3OS05LjA3OSw5LjA3OWgtNjYuNTc5ICAgYy01LjAwOSwwLTkuMDc5LTQuMDYxLTkuMDc5LTkuMDc5VjIxNi44ODRIOS4wNzljLTUuMDE2LDAtOS4wNzktNC4wNjctOS4wNzktOS4wNzl2LTY2LjU3OWMwLTUuMDEzLDQuMDYzLTkuMDc5LDkuMDc5LTkuMDc5ICAgaDEyMy4wNjhWOS4wNzljMC01LjAxOCw0LjA2OS05LjA3OSw5LjA3OS05LjA3OWg2Ni41NzljNS4wMTIsMCw5LjA3OSw0LjA2MSw5LjA3OSw5LjA3OXYxMjMuMDY4aDEyMy4wNjcgICBDMzQ0Ljk3LDEzMi4xNDcsMzQ5LjAzLDEzNi4yMTMsMzQ5LjAzLDE0MS4yMjZ6IiBmaWxsPSIjZmZmZmZmIiBkYXRhLW9yaWdpbmFsPSIjMDAwMDAwIiBzdHlsZT0iIj48L3BhdGg+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPC9nPjwvc3ZnPg==';
+    btn.addEventListener('click', openForm);
+    btn.appendChild(plusSvg);
+    return btn;
 }
 
 function clearLibrary() {
     while (libraryList.firstChild) {
         libraryList.removeChild(libraryList.lastChild);
-  }
+    }
 }
 
 function openForm() {
     newBookForm.style.display = "flex";
-    newBookBtn.style.display = 'none';
 }
 function closeForm() {
     newBookForm.style.display = "none";
-    newBookBtn.style.display = 'block';
 }
