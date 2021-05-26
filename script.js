@@ -5,14 +5,27 @@ const authorInput = document.querySelector('#input-author');
 const pagesInput = document.querySelector('#input-pages');
 const readInput = document.querySelector('[data-read]');
 const submitInput = document.querySelector('#submitInputBtn')
+const darkModeBtn = document.querySelector('#night-btn');
+const body = document.querySelector('body');
+const darkIcon = document.querySelector('#toggle-dark');
+const lightIcon = document.querySelector('#toggle-light');
 
 submitInput.addEventListener('click', () => {
     addBookToLibrary();
     refreshLibrary();
     closeForm();
 })
+let darkMode =  '';
 
-document.addEventListener('click',function(e){
+darkModeBtn.addEventListener('click', () => {
+    if (darkMode === 'false') {
+        enableDark()
+    } else if (darkMode === 'true') {
+        disableDark();
+    };
+});
+
+document.addEventListener('click', function(e){
     if(e.target && e.target.id == 'addButton'){
           openForm();
      }
@@ -27,10 +40,19 @@ class Book {
     }
 }
 
-let myLibrary = [
-    new Book("The Melancholy of Haruhi Suzumiya", "Nagaru Tanigawa", 206, false),
-    new Book("No Game No Life", "Yuu Kamiya", 176, true),
-];
+let myLibrary = JSON.parse(localStorage.getItem('library'));
+
+if (localStorage.getItem('library') === null) {
+    myLibrary = [
+        new Book("The Melancholy of Haruhi Suzumiya", "Nagaru Tanigawa", 206, false),
+        new Book("No Game No Life", "Yuu Kamiya", 176, true),
+    ]
+}
+
+if (localStorage.getItem('darkMode') === null) {
+    localStorage.setItem('darkMode', false);
+}
+
 
 function addBookToLibrary() {
     return myLibrary.push(new Book(titleInput.value, authorInput.value, pagesInput.value, readInput.checked));
@@ -38,7 +60,13 @@ function addBookToLibrary() {
 
 window.onload = refreshLibrary();
 
+function updateLibrary() {
+    localStorage.setItem('library', JSON.stringify(myLibrary));
+    darkMode = localStorage.getItem('darkMode');
+}
+
 function refreshLibrary() {
+    updateLibrary()
     clearLibrary() 
     myLibrary.forEach((book, index) => {
         book.id = index;
@@ -122,4 +150,18 @@ function openForm() {
 }
 function closeForm() {
     newBookForm.classList.remove('shown');
+}
+
+function enableDark() {
+    darkIcon.classList.toggle('shown');
+    lightIcon.classList.toggle('shown');
+    body.classList.add('night');
+    localStorage.setItem('darkMode', true);
+}
+
+function disableDark() {
+    darkIcon.classList.toggle('shown');
+    lightIcon.classList.toggle('shown');
+    body.classList.remove('night');
+    localStorage.setItem('darkMode', false);
 }
