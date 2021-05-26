@@ -7,16 +7,17 @@ html {
 
 body {
     background-color: #FAFAFA;
+    margin: 0;
+}
+
+:root {
+    --gray: #313131;
 }
 
 .container {
   max-width: 75vw;
   width: 100%;
   margin: 0 auto;
-}
-
-#form-overlay {
-    display: none;
 }
 
 .overlay{
@@ -27,7 +28,7 @@ body {
     width:100vw;
     height:100vh;
     background-color: black;
-    background-color:rgba(0,0,0,.75)
+    background-color:rgba(0,0,0,.50)
 }
 
 header {
@@ -37,7 +38,19 @@ header {
 }
 
 #form-popup {
-    display: none;
+    -webkit-transition: all 0.2s ease-in-out 0s;
+    -moz-transition: all 0.2s ease-in-out 0s;
+    -ms-transition: all 0.2s ease-in-out 0s;
+    transition: all 0.2s ease-in-out 0s;
+
+    visibility: hidden;
+    opacity: 0;
+    display:flex;
+}
+
+#form-popup.shown {
+    opacity: 1;
+    visibility: visible;
 }
 
 #addButton {
@@ -47,6 +60,11 @@ header {
     background-color: hsl(0, 0%, 40%);
     padding: 25px;
     transition: background-color 100ms;
+    color: white;
+}
+
+#add-icon {
+    font-size: 7em;
 }
 
 #addButton:hover {
@@ -66,7 +84,7 @@ header {
     flex-direction: column;
     padding: 20px;
     gap: 10px;
-    position: absolute;
+    position: fixed;
     max-width: 800px;
     top: 50%;
     left: 50%;
@@ -78,46 +96,59 @@ header {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
+    padding: 10px;
+    border-width: 1px;
+    border-color: #CCCCCC;
+    border-style: solid;
+    border-radius: 0px;
 }
 
-.input-checkbox {
+.form-input.checkbox {
     flex-direction: row;
 }
 
 .form-input > label {
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.form-input > input[type=checkbox] {
-    margin-left: 10px;
+    color: var(--gray);
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
 }
 
 .input-text {
-    transition: .25s border ease-in-out;
-    outline: none !important;
-    box-shadow: none !important;
+    font-size: 22px;
+    margin-top: 10px;
     border: 0;
-    border-bottom: 2px solid #999;
-    font-size: 20px;
+    background-color: #FFFFFF;
+    color: #000000;
 }
 
 .input-text:focus{
-  border-color: #CC2C21;
+    outline: none;
+}
+
+.input-checkbox {
+    margin-left: 10px;
+    font-size: 1.5em;
 }
 
 #library-list {
     margin-bottom: 1em;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-auto-rows: minmax(250px, 1fr);
     grid-gap: 25px;
 }
+
+
 .card {
     color: white;
     display:flex;
     flex-direction: column;
     padding: 25px;
     position: relative;
+    white-space: normal;
+    word-wrap: break-word;
+    transition: background-color 50ms;
 }
 
 .card p {
@@ -135,8 +166,20 @@ header {
     margin: 0;
 }
 
-.card-read {
+.card-controls {
     margin-top: auto;
+    display: flex;
+    align-items:center;
+}
+
+.card-delBtn {
+    margin-left: auto;
+    font-size: large;
+    transition: filter 100ms;
+}
+
+.card-delBtn:hover {
+    filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.664));
 }
 
 .shadow {
@@ -144,6 +187,20 @@ header {
     box-shadow: 5px 5px 18px -1px rgba(0,0,0,0.34);
 }
 
+.card-readBtn {
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+  padding: 5px 10px;
+  border: solid #ffffff 2px;
+  transition: background-color 30ms;
+}
+
+.card-readBtn:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
 
 .card-notcompleted {
     background: rgb(25,118,210);
@@ -153,4 +210,14 @@ header {
 .card-completed {
     background: rgb(25,118,210);
     background: linear-gradient(130deg, rgba(25,118,210,1) 0%, rgba(63,81,181,1) 100%);
+}
+
+@media screen and (max-width: 600px) {
+    #library-list {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    header h1 {
+        font-size: 1.4em;
+    }
 }
