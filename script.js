@@ -15,14 +15,11 @@ submitInput.addEventListener('click', () => {
     refreshLibrary();
     closeForm();
 })
-let darkMode =  '';
+let darkMode =  localStorage.getItem('darkMode');
 
-darkModeBtn.addEventListener('click', () => {
-    if (darkMode === 'false') {
-        enableDark()
-    } else if (darkMode === 'true') {
-        disableDark();
-    };
+darkModeBtn.addEventListener('click', (e) => {
+    console.log(e)
+    toggleDark();
 });
 
 document.addEventListener('click', function(e){
@@ -58,11 +55,13 @@ function addBookToLibrary() {
     return myLibrary.push(new Book(titleInput.value, authorInput.value, pagesInput.value, readInput.checked));
 }
 
-window.onload = refreshLibrary();
+window.onload = () => {
+    refreshLibrary(); 
+    startupDark();
+}
 
 function updateLibrary() {
     localStorage.setItem('library', JSON.stringify(myLibrary));
-    darkMode = localStorage.getItem('darkMode');
 }
 
 function refreshLibrary() {
@@ -153,15 +152,35 @@ function closeForm() {
 }
 
 function enableDark() {
-    darkIcon.classList.toggle('shown');
-    lightIcon.classList.toggle('shown');
+    darkIcon.classList.remove('shown');
+    lightIcon.classList.add('shown');
     body.classList.add('night');
     localStorage.setItem('darkMode', true);
+    darkMode = 'true';
 }
 
 function disableDark() {
-    darkIcon.classList.toggle('shown');
-    lightIcon.classList.toggle('shown');
+    darkIcon.classList.add('shown');
+    lightIcon.classList.remove('shown');
     body.classList.remove('night');
     localStorage.setItem('darkMode', false);
+    darkMode = 'false'
+}
+
+function toggleDark() {
+    if (darkMode === 'false') {
+        console.log('true')
+        enableDark();
+    } else {
+        console.log('false')
+        disableDark();
+    }
+}
+
+function startupDark() {
+    if (darkMode === 'true') {
+        enableDark()
+    } else {
+        disableDark();
+    }
 }
