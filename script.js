@@ -94,6 +94,7 @@ function updateCard(book) {
     let ctrlContainer = document.createElement('div')
     let readBtn = document.createElement('button');
     let delBtn = document.createElement('i');
+    readBtn.addEventListener('click', () => toggleRead(book))
 
     title.textContent = book.title;
     author.textContent = `Written by ${book.author}`;
@@ -108,11 +109,10 @@ function updateCard(book) {
     readBtn.className = 'card-readBtn';
     delBtn.className = 'card-delBtn fas fa-trash'
 
-    if (book.read) card.classList.add('card-notcompleted');
+    if (!book.read) card.classList.add('card-notcompleted');
     else card.classList.add('card-completed');
 
     delBtn.addEventListener('click', () => deleteCard(book.id));
-    readBtn.addEventListener('click', () => toggleRead(book))
 
     card.dataset.id = book.id;
 
